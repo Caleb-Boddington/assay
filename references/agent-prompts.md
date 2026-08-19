@@ -28,6 +28,12 @@ link. Indexes go stale: entries point at folders since renamed and repositories 
 Rules:
 - Find skills that fit THIS person. Not skills that are generally good. A widely
   praised skill that does not match their profile is a rejection, not a recommendation.
+- CHECK THE FRONTMATTER FIRST, before reading the body. A skill with no YAML
+  frontmatter, or a lowercase skill.md filename, or no name and description fields,
+  cannot be discovered or triggered by Claude Code at all. It is not installable, whatever
+  the prose inside is worth. Reject it on row 2 immediately and stop reading. On
+  19 August 2026 two of the best-fitting candidates found anywhere in a run were both
+  dead for exactly this reason, after their bodies had been read in full.
 - Never score a candidate without first opening its actual SKILL.md. Never score from a
   repository name, a README claim, a badge or a star count. If you cannot reach the
   file, report that it could not be read and do not score it.
@@ -48,7 +54,11 @@ Rules:
 Score each candidate 1 to 5 on five rows, out of 25:
 1. Does it do something Claude will not already do unprompted?
 2. Is the trigger description narrow and specific enough to fire correctly?
-3. Does it fit THIS person? Score 5 only if you can quote the evidence. The quote may
+3. Does it fit THIS person? Score 5 only if you can quote the evidence. Score against
+   whichever half of their profile the skill serves: what they do today, or the
+   direction they said they are moving in. A skill for where they are heading can score
+   5 on the stated goal. Do not cap it at 4 just because the honest quote says
+   "targeting" or "eventually". The quote may
    come from the profile above OR from any of their configuration files you have read.
    Cite where it came from. Do not mark a genuine 5 down to a 4 because the best
    evidence was not in the profile summary.
@@ -71,6 +81,8 @@ Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Horizon.       "Now" if it serves work they do today, "Ahead" if it serves the
+               direction they named. Both are real recommendations.
 Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
                On a REJECT this line becomes "Why not", and names the disqualifier.
@@ -108,6 +120,12 @@ one brings in everything it contains.
 Rules:
 - Find things that fit THIS person. Not things that are generally good. A widely praised
   plugin that does not match their profile is a rejection, not a recommendation.
+- CHECK THE FRONTMATTER FIRST, before reading the body. A skill with no YAML
+  frontmatter, or a lowercase skill.md filename, or no name and description fields,
+  cannot be discovered or triggered by Claude Code at all. It is not installable, whatever
+  the prose inside is worth. Reject it on row 2 immediately and stop reading. On
+  19 August 2026 two of the best-fitting candidates found anywhere in a run were both
+  dead for exactly this reason, after their bodies had been read in full.
 - Never score a candidate without first opening its actual SKILL.md or plugin manifest.
   Never score from a name, a listing blurb, a badge or an install count. If you cannot
   reach the files, report that and do not score it.
@@ -128,7 +146,11 @@ Rules:
 Score each candidate 1 to 5 on five rows, out of 25:
 1. Does it do something Claude will not already do unprompted?
 2. Is the trigger description narrow and specific enough to fire correctly?
-3. Does it fit THIS person? Score 5 only if you can quote the evidence. The quote may
+3. Does it fit THIS person? Score 5 only if you can quote the evidence. Score against
+   whichever half of their profile the skill serves: what they do today, or the
+   direction they said they are moving in. A skill for where they are heading can score
+   5 on the stated goal. Do not cap it at 4 just because the honest quote says
+   "targeting" or "eventually". The quote may
    come from the profile above OR from any of their configuration files you have read.
    Cite where it came from. Do not mark a genuine 5 down to a 4 because the best
    evidence was not in the profile summary.
@@ -149,6 +171,8 @@ Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Horizon.       "Now" if it serves work they do today, "Ahead" if it serves the
+               direction they named. Both are real recommendations.
 Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
                On a REJECT this line becomes "Why not", and names the disqualifier.
@@ -185,6 +209,12 @@ evidence of anything. Follow through to each repository and read the file there.
 Rules:
 - Find skills that fit THIS person. Not skills that are generally good. A widely praised
   skill that does not match their profile is a rejection, not a recommendation.
+- CHECK THE FRONTMATTER FIRST, before reading the body. A skill with no YAML
+  frontmatter, or a lowercase skill.md filename, or no name and description fields,
+  cannot be discovered or triggered by Claude Code at all. It is not installable, whatever
+  the prose inside is worth. Reject it on row 2 immediately and stop reading. On
+  19 August 2026 two of the best-fitting candidates found anywhere in a run were both
+  dead for exactly this reason, after their bodies had been read in full.
 - Never score a candidate without first opening its actual SKILL.md. Never score from a
   list entry's one-line summary, a repository name, a badge or a star count. If you
   cannot reach the file, report that it could not be read and do not score it.
@@ -205,7 +235,11 @@ Rules:
 Score each candidate 1 to 5 on five rows, out of 25:
 1. Does it do something Claude will not already do unprompted?
 2. Is the trigger description narrow and specific enough to fire correctly?
-3. Does it fit THIS person? Score 5 only if you can quote the evidence. The quote may
+3. Does it fit THIS person? Score 5 only if you can quote the evidence. Score against
+   whichever half of their profile the skill serves: what they do today, or the
+   direction they said they are moving in. A skill for where they are heading can score
+   5 on the stated goal. Do not cap it at 4 just because the honest quote says
+   "targeting" or "eventually". The quote may
    come from the profile above OR from any of their configuration files you have read.
    Cite where it came from. Do not mark a genuine 5 down to a 4 because the best
    evidence was not in the profile summary.
@@ -225,6 +259,8 @@ Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Horizon.       "Now" if it serves work they do today, "Ahead" if it serves the
+               direction they named. Both are real recommendations.
 Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
                On a REJECT this line becomes "Why not", and names the disqualifier.
@@ -260,6 +296,12 @@ Row 5 matters most here. Read what these files actually instruct the model to do
 Rules:
 - Find skills that fit THIS person. Not skills that are generally good. A widely praised
   skill that does not match their profile is a rejection, not a recommendation.
+- CHECK THE FRONTMATTER FIRST, before reading the body. A skill with no YAML
+  frontmatter, or a lowercase skill.md filename, or no name and description fields,
+  cannot be discovered or triggered by Claude Code at all. It is not installable, whatever
+  the prose inside is worth. Reject it on row 2 immediately and stop reading. On
+  19 August 2026 two of the best-fitting candidates found anywhere in a run were both
+  dead for exactly this reason, after their bodies had been read in full.
 - Never score a candidate without first opening its actual SKILL.md. Never score from a
   repository name, a README claim, a badge or a star count. If you cannot reach the
   file, report that it could not be read and do not score it.
@@ -280,7 +322,11 @@ Rules:
 Score each candidate 1 to 5 on five rows, out of 25:
 1. Does it do something Claude will not already do unprompted?
 2. Is the trigger description narrow and specific enough to fire correctly?
-3. Does it fit THIS person? Score 5 only if you can quote the evidence. The quote may
+3. Does it fit THIS person? Score 5 only if you can quote the evidence. Score against
+   whichever half of their profile the skill serves: what they do today, or the
+   direction they said they are moving in. A skill for where they are heading can score
+   5 on the stated goal. Do not cap it at 4 just because the honest quote says
+   "targeting" or "eventually". The quote may
    come from the profile above OR from any of their configuration files you have read.
    Cite where it came from. Do not mark a genuine 5 down to a 4 because the best
    evidence was not in the profile summary.
@@ -300,6 +346,8 @@ Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Horizon.       "Now" if it serves work they do today, "Ahead" if it serves the
+               direction they named. Both are real recommendations.
 Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
                On a REJECT this line becomes "Why not", and names the disqualifier.

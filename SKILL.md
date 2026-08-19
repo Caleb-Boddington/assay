@@ -110,6 +110,8 @@ Then one block each:
 ```
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Horizon.       "Now" if it serves work they do today, "Ahead" if it serves the
+               direction they named. Both are real recommendations.
 Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific found in their files. Quote it.
                On a REJECT this line becomes "Why not", and names the disqualifier.
