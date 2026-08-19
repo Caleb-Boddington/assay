@@ -45,6 +45,10 @@ Score each candidate 1 to 5 on five rows, out of 25:
 Auto-reject if row 1, 2 or 3 scores under 3, whatever the total. The default answer is
 "do not install".
 
+ALSO auto-reject if the skill does not run on the person's operating system, whatever it
+scores. Check every candidate for platform claims. A skill that cannot run on their
+machine is worth nothing to them.
+
 Note in the trust line that a skill is official. It is the one provenance signal that
 needs no further checking.
 
@@ -52,8 +56,11 @@ Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
+               On a REJECT this line becomes "Why not", and names the disqualifier.
 Trust.         Author, last commit, licence, official or marketplace listed.
+               "No provenance available" is a valid answer, and a damning one.
 Watch out.     Drawbacks, scripts it runs, keys it needs.
 Verdict.       INSTALL, TRIAL or REJECT, then the clone URL.
 
@@ -104,12 +111,19 @@ Score each candidate 1 to 5 on five rows, out of 25:
 Auto-reject if row 1, 2 or 3 scores under 3, whatever the total. The default answer is
 "do not install".
 
+ALSO auto-reject if the skill does not run on the person's operating system, whatever it
+scores. Check every candidate for platform claims. A skill that cannot run on their
+machine is worth nothing to them.
+
 Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
+               On a REJECT this line becomes "Why not", and names the disqualifier.
 Trust.         Author, last commit, licence, official or marketplace listed.
+               "No provenance available" is a valid answer, and a damning one.
 Watch out.     Drawbacks, scripts it runs, keys it needs.
 Verdict.       INSTALL, TRIAL or REJECT, then the clone URL.
 
@@ -158,12 +172,19 @@ Score each candidate 1 to 5 on five rows, out of 25:
 Auto-reject if row 1, 2 or 3 scores under 3, whatever the total. The default answer is
 "do not install".
 
+ALSO auto-reject if the skill does not run on the person's operating system, whatever it
+scores. Check every candidate for platform claims. A skill that cannot run on their
+machine is worth nothing to them.
+
 Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
+               On a REJECT this line becomes "Why not", and names the disqualifier.
 Trust.         Author, last commit, licence, official or marketplace listed.
+               "No provenance available" is a valid answer, and a damning one.
 Watch out.     Drawbacks, scripts it runs, keys it needs.
 Verdict.       INSTALL, TRIAL or REJECT, then the clone URL.
 
@@ -211,12 +232,19 @@ Score each candidate 1 to 5 on five rows, out of 25:
 Auto-reject if row 1, 2 or 3 scores under 3, whatever the total. The default answer is
 "do not install".
 
+ALSO auto-reject if the skill does not run on the person's operating system, whatever it
+scores. Check every candidate for platform claims. A skill that cannot run on their
+machine is worth nothing to them.
+
 Return each surviving candidate in exactly this shape, and nothing else:
 
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific in their profile. Quote it.
+               On a REJECT this line becomes "Why not", and names the disqualifier.
 Trust.         Author, last commit, licence, official or marketplace listed.
+               "No provenance available" is a valid answer, and a damning one.
 Watch out.     Drawbacks, scripts it runs, keys it needs.
 Verdict.       INSTALL, TRIAL or REJECT, then the clone URL.
 

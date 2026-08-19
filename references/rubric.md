@@ -4,6 +4,8 @@ Five rows, scored 1 to 5 each, out of 25. Read this before scoring anything.
 
 **Auto-reject if row 1, 2 or 3 scores under 3.** The total does not rescue it. A skill that fails any of the first three is not worth having however good the rest looks.
 
+**Auto-reject if it does not run on the person's operating system**, whatever it scores. This sits outside the five rows deliberately. It caught the rubric out on 19 August 2026: a candidate whose own file said "Works on macOS and Linux. Windows support is planned" was being weighed on fit and merit for a Windows user, and only failed by accident. Nothing else matters if it cannot run.
+
 **The default answer is "do not install".**
 
 ---
