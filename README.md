@@ -4,7 +4,7 @@ Reads your own Claude setup, works out what you actually do, then finds skills t
 
 ![version](https://img.shields.io/badge/version-0.1.0-blueviolet)
 ![licence](https://img.shields.io/badge/licence-MIT-blue)
-![agents](https://img.shields.io/badge/agents-4%20per%20run-orange)
+![agents](https://img.shields.io/badge/agents-4_per_run-orange)
 ![status](https://img.shields.io/badge/status-experimental-yellow)
 
 ## What it reads
