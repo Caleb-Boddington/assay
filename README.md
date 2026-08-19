@@ -80,6 +80,8 @@ Five rows, 1 to 5 each, out of 25. Full detail in `references/rubric.md`.
 
 **Auto-reject if row 1, 2 or 3 scores under 3**, whatever the total. The default answer is "do not install".
 
+**Auto-reject if it will not run on your operating system**, whatever it scores. This sits outside the five rows, because a great skill you cannot run is worth nothing. A lot of published skills quietly assume macOS or Linux.
+
 Maintenance is deliberately not scored. A skill is a text file, not a library. It has no dependencies to rot and no patches to miss, so six quiet months proves nothing except that nobody needed to change it. The last commit date is reported as a fact and weighed by you.
 
 ## What it will not do

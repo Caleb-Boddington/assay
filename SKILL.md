@@ -95,13 +95,26 @@ Then one block each:
 ```
 ### owner/repo - skill-name - 21/25
 What it does.  One line.
+Runs on.       Which operating systems. Say plainly if it will not run on theirs.
 Why you.       Tied to something specific found in their files. Quote it.
+               On a REJECT this line becomes "Why not", and names the disqualifier.
 Trust.         Author, last commit, licence, official or marketplace listed.
+               "No provenance available" is a valid answer, and a damning one.
 Watch out.     Drawbacks, scripts it runs, keys it needs.
 Verdict.       INSTALL, TRIAL or REJECT, then the clone URL.
 ```
 
-"Why you" is the row that justifies this skill existing. If it could be written about anyone, the recommendation is not personalised and the score on row 3 is wrong.
+"Why you" is the line that justifies this skill existing. If it could be written about anyone, the recommendation is not personalised and the score on row 3 is wrong.
+
+**On a rejection, do not write a "Why you" line.** Arguing the fit for something you are about to reject buries the disqualifier in the one place a reader does not look for it. Write "Why not" and lead with the reason.
+
+### Platform is an auto-reject
+
+**If a skill does not run on the person's operating system, reject it whatever it scores.**
+
+This is not covered by any of the five rows and it caught the rubric out in testing on 19 August 2026: a candidate whose own file said "Works on macOS and Linux. Windows support is planned" was being scored on fit and merit for a Windows user, and only failed by accident. A great skill that cannot run on their machine is worth nothing to them.
+
+Note the operating system in the profile at step 1, and check every candidate against it.
 
 Every REJECT that got far enough to be read gets one line saying why. A rejection with a reason teaches the person something about their own setup. A silent rejection teaches them nothing.
 
