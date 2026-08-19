@@ -38,6 +38,8 @@ A skill fires on its `description`. Vague descriptions either never fire or fire
 
 Check the description against what the person already has installed. Two skills competing for the same trigger is worse than either alone.
 
+**Check the frontmatter before reading the body, always.** No YAML frontmatter, a lowercase `skill.md` filename, or missing `name` and `description` fields means Claude Code cannot discover or trigger it at all. That is row 2 = 1 and an immediate stop, whatever the prose inside is worth. It costs one glance and it is common: on 19 August 2026 two of the best-fitting candidates found anywhere in a run were both dead for this reason, and both were discovered only after their bodies had been read in full.
+
 ## Row 3: Does it fit this specific person?
 
 The row this whole exercise exists for. Score it against the profile, not against general merit.
@@ -53,6 +55,19 @@ The row this whole exercise exists for. Score it against the profile, not agains
 **If you cannot quote the evidence, the score is not 5.** This is the row most likely to be scored generously, because everything looks relevant if you squint.
 
 The quote may come from **any file read in step 1**, not only from the summarised profile. An agent on 19 August 2026 found its strongest match evidenced in the person's `CLAUDE.md` rather than in the profile it had been handed, and scored it 4 because the rule seemed to forbid the better citation. Cite the file and the line. The summary is a convenience, not the evidence.
+
+### Now, and where they are going
+
+Most profiles have two halves. What the person does this week, and what they are working towards. A career changer's is mostly the second, and the interesting skills usually sit there.
+
+Scoring both against "do they do this repeatedly" quietly buries the second half, because the honest quote is always "targeting" or "eventually", which caps the row at 4 forever. An agent hit this on 19 August 2026: every skill in the domains it had been told to prioritise was structurally unable to score 5.
+
+So score the row against **whichever half the skill serves**, and say which in the output:
+
+- `Horizon. Now.` Serves work they do today. Quote the recurring task.
+- `Horizon. Ahead.` Serves the direction they named. Quote the goal. This can score 5, and the quote is the stated ambition rather than a logged task.
+
+A skill for where somebody is heading is a real recommendation. It is not a weaker one, and it must not be scored as though the person had failed to already be doing the thing they said they were moving towards.
 
 ## Row 4: Context cost against payoff
 
