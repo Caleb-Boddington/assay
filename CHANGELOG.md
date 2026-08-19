@@ -26,7 +26,7 @@ The skill installs nothing. Installing on someone's behalf, from a list generate
 
 **Tested before release**
 
-One full run, five agents, written up in `runs/2026-08-19-first-run.md`. It was run to find defects rather than to find skills, and it found eleven. The largest: the reading rule was literally impossible against a marketplace of two thousand plugins under a sixty-request hourly rate limit; frontmatter was never checked, so two of the best candidates in the whole run turned out to be undiscoverable by Claude Code after their bodies had been read in full; and the profile step never extracted temperament, which is what every behavioural skill targets.
+One full run, five agents, on 19 August 2026. It was run to find defects rather than to find skills, and it found eleven. The largest: the reading rule was literally impossible against a marketplace of two thousand plugins under a sixty-request hourly rate limit; frontmatter was never checked, so two of the best candidates in the whole run turned out to be undiscoverable by Claude Code after their bodies had been read in full; and the profile step never extracted temperament, which is what every behavioural skill targets.
 
 The injection defence was tested against a hostile fixture and held. One attack, one shape, once.
 
