@@ -61,7 +61,7 @@ Or narrow it:
 1. Reads the four locations above and builds a profile: what you do, what you use, what comes up repeatedly.
 2. Lists what you already have installed, so nothing gets recommended twice.
 3. Fans out to four agents, one per source: Anthropic's official repository, the plugin marketplaces, community lists, and loose GitHub repositories.
-4. Each agent opens and reads every candidate's actual `SKILL.md`, scores it, and returns finished blocks only. Raw files never reach your main context, which is the whole reason for fanning out.
+4. Each agent screens candidates on their descriptions, reads every shortlisted one's actual `SKILL.md` in full, scores it, and returns finished blocks only. Raw files never reach your main context, which is the whole reason for fanning out.
 5. Reports one block per recommendation, with the drawbacks named.
 
 Four agents is a cap, not a starting point. One agent per candidate would scale with whatever the search turned up and spawn thirty agents on somebody who asked a simple question.
@@ -90,7 +90,7 @@ Maintenance is deliberately not scored. A skill is a text file, not a library. I
 
 **It does not vet connectors.** A connector, or MCP server, is an external service Claude talks to. It holds credentials and moves your data through a third party. Vetting one means reading a privacy policy and an OAuth scope list, not a markdown file. A score that treats "this text file is safe" and "this company can read your Gmail" as the same measurement is a bad score. Connectors get at most an unscored mention, clearly labelled.
 
-**It does not rate anything it has not read.** No scoring from repository names, README claims, badges or star counts.
+**It does not score anything it has not opened.** Candidates are screened on their descriptions to a shortlist, then every shortlisted one is read in full. No scoring from repository names, README claims, badges or star counts, and the output says which candidates were screened out without being opened.
 
 ## Known limitations
 
