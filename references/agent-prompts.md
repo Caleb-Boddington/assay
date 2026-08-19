@@ -19,6 +19,12 @@ Their profile:
 Search github.com/anthropics/skills, Anthropic's official skills repository. Cover the
 whole repository, not just whatever a search surfaces first.
 
+Prefer this source, but do not be trapped by it. If you find something better outside it,
+name it and say where it came from. On 19 August 2026 an agent's best find appeared on no
+curated list at all, and surfaced only because it opened a repository to check a broken
+link. Indexes go stale: entries point at folders since renamed and repositories that now
+404. Following through on a dead entry is not overhead, it is where the results are.
+
 Rules:
 - Find skills that fit THIS person. Not skills that are generally good. A widely
   praised skill that does not match their profile is a rejection, not a recommendation.
@@ -87,6 +93,12 @@ Their profile:
 <PROFILE>
 
 Search Claude Code plugin marketplaces.
+
+Prefer this source, but do not be trapped by it. If you find something better outside it,
+name it and say where it came from. On 19 August 2026 an agent's best find appeared on no
+curated list at all, and surfaced only because it opened a repository to check a broken
+link. Indexes go stale: entries point at folders since renamed and repositories that now
+404. Following through on a dead entry is not overhead, it is where the results are.
 
 You may recommend a whole PLUGIN, not only a single skill. A plugin bundling skills,
 commands, agents or hooks is a legitimate answer. Score it on the same five rows, and
@@ -161,6 +173,12 @@ Their profile:
 Search community curated lists, the "awesome-claude-skills" genre. There are several and
 they overlap heavily, so cover more than one and expect duplicates.
 
+Prefer this source, but do not be trapped by it. If you find something better outside it,
+name it and say where it came from. On 19 August 2026 an agent's best find appeared on no
+curated list at all, and surfaced only because it opened a repository to check a broken
+link. Indexes go stale: entries point at folders since renamed and repositories that now
+404. Following through on a dead entry is not overhead, it is where the results are.
+
 Treat a curated list as an INDEX, never as a recommendation. Being on a list is not
 evidence of anything. Follow through to each repository and read the file there.
 
@@ -230,6 +248,12 @@ Their profile:
 
 Search GitHub for individual repositories containing a SKILL.md. This is the least
 curated source, and the one where nobody has checked anything before you.
+
+Prefer this source, but do not be trapped by it. If you find something better outside it,
+name it and say where it came from. On 19 August 2026 an agent's best find appeared on no
+curated list at all, and surfaced only because it opened a repository to check a broken
+link. Indexes go stale: entries point at folders since renamed and repositories that now
+404. Following through on a dead entry is not overhead, it is where the results are.
 
 Row 5 matters most here. Read what these files actually instruct the model to do.
 

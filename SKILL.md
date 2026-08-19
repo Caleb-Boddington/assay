@@ -44,6 +44,11 @@ Then read all four locations. Extract:
 - Recurring tasks that show up more than once
 - Tools, platforms and operating system
 - Anything they have said they dislike or have already rejected
+- **How they want to be worked with.** Temperament, working style, standing instructions about tone, pace and format. Whether they said something is their bottleneck.
+
+That last one is the easiest to skip and the most valuable. On 19 August 2026 an agent's single best find was a focus and next-action skill, justified by a line about focus being the person's bottleneck. That line was in their configuration and absent from the profile summary the agent had been given, so it nearly went unrecommended. Task lists and tool lists find task and tool skills. Temperament is what every behavioural skill actually targets, and nothing else surfaces it.
+
+**Pass the profile with its quotes attached, not as a summary.** Give each agent the verbatim lines that support each conclusion, and say which file each came from. A summary strips exactly the evidence row 3 requires.
 
 **If none of the four exist**, say so plainly and ask them to describe what they do in one sentence, then carry on from that. Do not guess from an empty profile. Do not fall back to recommending popular skills. A popularity list is not what this is for, and anyone can find one.
 
