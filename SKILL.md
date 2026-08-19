@@ -1,12 +1,12 @@
 ---
-name: skill-recon
+name: assay
 description: Reads your own Claude configuration and notes, works out what you actually do, then searches GitHub and the plugin marketplaces for skills and plugins that fit you and vets each one before recommending it. Nothing is scored without its file being opened and read, and each survivor is scored out of 25 and given a verdict of INSTALL, TRIAL or REJECT with its drawbacks named. Use when asked what skills are worth having, which skills would suit me, what should I install, or to find skills for what I do. Reads local files without asking first, and names them at the top of every run.
 argument-hint: "[a domain to narrow to, optional]"
 allowed-tools: Agent, Read, Glob, Grep, WebSearch, WebFetch, AskUserQuestion
 version: 0.1.0
 ---
 
-# Skill Recon
+# Assay
 
 Most skill directories let you search by task. You already know your task. What you do not know is which of four hundred skills is worth the context it costs, which one quietly runs a script you did not read, and which one solves a problem you do not have.
 

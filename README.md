@@ -1,4 +1,4 @@
-# Skill Recon
+# Assay
 
 Reads your own Claude setup, works out what you actually do, then finds skills that fit you and vets each one before recommending it.
 
@@ -33,13 +33,13 @@ So this searches by *you* instead.
 ## Install
 
 ```bash
-git clone https://github.com/Caleb-Boddington/skill-recon.git ~/.claude/skills/skill-recon
+git clone https://github.com/Caleb-Boddington/assay.git ~/.claude/skills/assay
 ```
 
 Windows:
 
 ```powershell
-git clone https://github.com/Caleb-Boddington/skill-recon.git $env:USERPROFILE\.claude\skills\skill-recon
+git clone https://github.com/Caleb-Boddington/assay.git $env:USERPROFILE\.claude\skills\assay
 ```
 
 Then restart Claude Code. `SKILL.md` sits at the root and reads `references/rubric.md` and `references/agent-prompts.md` as it runs.
@@ -53,7 +53,7 @@ What skills should I be using?
 Or narrow it:
 
 ```
-/skill-recon security
+/assay security
 ```
 
 ## How it works
