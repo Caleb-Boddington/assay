@@ -52,6 +52,8 @@ The row this whole exercise exists for. Score it against the profile, not agains
 
 **If you cannot quote the evidence, the score is not 5.** This is the row most likely to be scored generously, because everything looks relevant if you squint.
 
+The quote may come from **any file read in step 1**, not only from the summarised profile. An agent on 19 August 2026 found its strongest match evidenced in the person's `CLAUDE.md` rather than in the profile it had been handed, and scored it 4 because the rule seemed to forbid the better citation. Cite the file and the line. The summary is a convenience, not the evidence.
+
 ## Row 4: Context cost against payoff
 
 Every installed skill's description sits in context permanently. The body loads when it fires.
@@ -100,6 +102,17 @@ Report the last commit date as a fact in the trust line. Let the reader weigh it
 
 ## Read before rating
 
-Open and read every candidate's actual `SKILL.md`. No score from a repo name, a README claim, a badge or a star count.
+**Never score anything you have not opened.** No score from a repo name, a README claim, a badge or a star count.
 
-Blog posts, YouTube videos and X threads are leads to a repository. They are never sources. If you cannot reach the file, say the candidate could not be read and do not score it.
+That rule survives. The absolute version of it, "open and read every candidate", does not, and was rewritten on 19 August 2026 after an agent hit reality: one marketplace alone carried over two thousand plugins, and GitHub rate-limits unauthenticated API access at sixty requests an hour. Reading everything is not slow, it is impossible.
+
+So work in two stages, and be honest about the boundary between them:
+
+1. **Screen** on catalogue text, names and descriptions, down to a shortlist. This stage rejects and never scores. A candidate dropped here gets one line saying it was dropped on its description without being opened.
+2. **Read** every shortlisted candidate's actual `SKILL.md` in full, then score it.
+
+**Say which candidates were screened out unopened and which were read.** A list that hides that boundary is claiming coverage it does not have.
+
+If `gh` is installed and authenticated, use it. The rate limit is the binding constraint on how much a run can read, and an authenticated budget is several times larger.
+
+Blog posts, YouTube videos and X threads are leads to a repository. They are never sources. If you cannot reach a shortlisted candidate's file, say so and do not score it.

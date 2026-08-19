@@ -1,6 +1,6 @@
 ---
 name: skill-recon
-description: Reads your own Claude configuration and notes, works out what you actually do, then searches GitHub and the plugin marketplaces for skills and plugins that fit you and vets each one before recommending it. Every candidate is opened and read, scored out of 25, and given a verdict of INSTALL, TRIAL or REJECT with its drawbacks named. Use when asked what skills are worth having, which skills would suit me, what should I install, or to find skills for what I do. Reads local files without asking first, and names them at the top of every run.
+description: Reads your own Claude configuration and notes, works out what you actually do, then searches GitHub and the plugin marketplaces for skills and plugins that fit you and vets each one before recommending it. Nothing is scored without its file being opened and read, and each survivor is scored out of 25 and given a verdict of INSTALL, TRIAL or REJECT with its drawbacks named. Use when asked what skills are worth having, which skills would suit me, what should I install, or to find skills for what I do. Reads local files without asking first, and names them at the top of every run.
 argument-hint: "[a domain to narrow to, optional]"
 allowed-tools: Agent, Read, Glob, Grep, WebSearch, WebFetch, AskUserQuestion
 version: 0.1.0
@@ -51,7 +51,17 @@ If the user passed an argument, narrow to that domain and say you have.
 
 ### 2. List what is already installed
 
-Read `~/.claude/skills/` and `~/.claude/plugins/`. Nothing already present gets recommended. Follow links: a skill folder may be a symlink or junction pointing elsewhere, and the name in `~/.claude/skills/` is the name that counts.
+Three places, not one. Missing any of them means recommending something the person already has, which is the fastest way to lose their trust in the whole list.
+
+1. `~/.claude/skills/`, following links. A skill folder is often a symlink or junction pointing elsewhere, and the name in this folder is the name that counts.
+2. `~/.claude/plugins/`, including `installed_plugins.json`. A plugin brings skills with it and they will not appear in `~/.claude/skills/`.
+3. **Skills already available in the current session.** Some are provided by the host rather than installed, so they appear in neither folder above and will vanish in an ordinary terminal session.
+
+That third category is a trap, found on 19 August 2026 when an agent nearly recommended a skill that was already live in the session but absent from both folders. Treat a session-provided skill as **not installed**, because it is not, but say so in the recommendation: "already available in this session, but not installed in Claude Code."
+
+**Include plugin-namespaced skills.** A plugin's skills appear as `plugin-name:skill-name`. On the same day, two agents independently wasted most of a run on candidates the person already had, because the list they were handed contained standalone skills only and omitted every plugin-supplied one. An entire category of framework skills was already installed and neither agent could see it.
+
+**Pass the complete list to all four agents, verbatim.** Do not summarise it and do not trim it. An agent cannot check against what it was not given.
 
 ### 3. Search, four agents, one per source
 
@@ -66,7 +76,7 @@ Dispatch four agents using the briefs in `references/agent-prompts.md`:
 | 3 | Community "awesome-claude-skills" style lists |
 | 4 | Individual GitHub repos containing a `SKILL.md` |
 
-Each agent searches its source, opens and reads every candidate, scores it, and returns finished blocks only. Raw `SKILL.md` files never come back to this context. That is the entire reason for fanning out: twenty candidates at five to ten kilobytes each is a great deal of markdown to carry for skills that mostly get rejected.
+Each agent searches its source, screens on descriptions down to a shortlist, reads every shortlisted candidate in full, scores it, and returns finished blocks only. Raw `SKILL.md` files never come back to this context. That is the entire reason for fanning out: twenty candidates at five to ten kilobytes each is a great deal of markdown to carry for skills that mostly get rejected.
 
 **Four is a cap, not a starting point.** Never one agent per candidate. That scales with whatever the search happens to turn up and spawns thirty agents on somebody who asked a simple question.
 
@@ -116,7 +126,12 @@ This is not covered by any of the five rows and it caught the rubric out in test
 
 Note the operating system in the profile at step 1, and check every candidate against it.
 
-Every REJECT that got far enough to be read gets one line saying why. A rejection with a reason teaches the person something about their own setup. A silent rejection teaches them nothing.
+**Which candidates get a full block, and which get one line:**
+
+- Anything that hit an auto-reject gets **one line**. Its scores are not interesting; it failed a gate.
+- Anything that cleared every gate gets a **full scored block**, whatever the verdict. A skill that scored 18 and still earns a REJECT is the most useful entry in the list, because the reasoning is not obvious and the person would otherwise install it.
+
+A rejection with a reason teaches the person something about their own setup. A silent rejection teaches them nothing.
 
 ## What this will not do
 
@@ -126,7 +141,7 @@ Every REJECT that got far enough to be read gets one line saying why. A rejectio
 
 One unscored mention at the end, clearly labelled as not vetted, is allowed. Nothing more.
 
-**It does not rate from a name.** Every candidate's actual `SKILL.md` is opened and read. Blog posts, videos and X threads are leads to a repo, never sources in themselves.
+**It does not score anything it has not opened.** Candidates are screened on their descriptions down to a shortlist, then every shortlisted one has its actual `SKILL.md` read in full before scoring. The output says which were screened out unopened and which were read, because a list that hides that boundary is claiming coverage it does not have. Blog posts, videos and X threads are leads to a repo, never sources in themselves.
 
 ## Limits, stated honestly
 
