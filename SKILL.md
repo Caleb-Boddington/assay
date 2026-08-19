@@ -1,0 +1,124 @@
+---
+name: skill-recon
+description: Reads your own Claude configuration and notes, works out what you actually do, then searches GitHub and the plugin marketplaces for skills and plugins that fit you and vets each one before recommending it. Every candidate is opened and read, scored out of 25, and given a verdict of INSTALL, TRIAL or REJECT with its drawbacks named. Use when asked what skills are worth having, which skills would suit me, what should I install, or to find skills for what I do. Reads local files without asking first, and names them at the top of every run.
+argument-hint: "[a domain to narrow to, optional]"
+allowed-tools: Agent, Read, Glob, Grep, WebSearch, WebFetch, AskUserQuestion
+version: 0.1.0
+---
+
+# Skill Recon
+
+Most skill directories let you search by task. You already know your task. What you do not know is which of four hundred skills is worth the context it costs, which one quietly runs a script you did not read, and which one solves a problem you do not have.
+
+This reads your own setup first, then goes looking. The search terms come from you.
+
+## What this reads, before anything else
+
+Four locations, and no others:
+
+1. `~/.claude/CLAUDE.md`
+2. `CLAUDE.md` in the working directory and every parent directory
+3. `~/.claude/projects/*/memory/*.md`
+4. `README.md` in the working directory
+
+These are the paths Claude Code already treats as user context. Nothing is uploaded. Web searches carry topic keywords only, never a phrase lifted from a private note.
+
+**Name every file you read at the top of the output.** The person did not get asked first, so they get told immediately after. This is not optional and it is not a footnote.
+
+## How a run goes
+
+### 1. Read the profile sources
+
+**Location 3 needs care.** `~/.claude/projects/*/memory/*.md` looks like one folder and is usually many. Claude Code creates a project folder per working directory, named after that directory with every non-alphanumeric character replaced by a hyphen, and it never deletes the old one when a folder moves or a temporary directory is used once. Tested on a real machine on 19 August 2026: twelve matching folders, ten of them empty scratch directories, one holding notes four days stale from a path the person had abandoned, and one live.
+
+So do not glob blindly:
+
+- Derive the expected folder from the current working directory using the hyphen rule, and prefer it.
+- If that folder does not exist, use the memory folder with the most recently modified file.
+- Skip empty folders entirely.
+- **Say which folder you used and how old its newest file is.** A profile built from stale notes is worse than no profile, because it looks right.
+
+Then read all four locations. Extract:
+
+- What they do for work or study, and what they are moving towards
+- Recurring tasks that show up more than once
+- Tools, platforms and operating system
+- Anything they have said they dislike or have already rejected
+
+**If none of the four exist**, say so plainly and ask them to describe what they do in one sentence, then carry on from that. Do not guess from an empty profile. Do not fall back to recommending popular skills. A popularity list is not what this is for, and anyone can find one.
+
+If the user passed an argument, narrow to that domain and say you have.
+
+### 2. List what is already installed
+
+Read `~/.claude/skills/` and `~/.claude/plugins/`. Nothing already present gets recommended. Follow links: a skill folder may be a symlink or junction pointing elsewhere, and the name in `~/.claude/skills/` is the name that counts.
+
+### 3. Search, four agents, one per source
+
+Announce the fan-out before dispatching it. Subagents cost the user real tokens and they should see it coming.
+
+Dispatch four agents using the briefs in `references/agent-prompts.md`:
+
+| Agent | Source |
+|---|---|
+| 1 | `github.com/anthropics/skills`, the official set |
+| 2 | Claude Code plugin marketplaces |
+| 3 | Community "awesome-claude-skills" style lists |
+| 4 | Individual GitHub repos containing a `SKILL.md` |
+
+Each agent searches its source, opens and reads every candidate, scores it, and returns finished blocks only. Raw `SKILL.md` files never come back to this context. That is the entire reason for fanning out: twenty candidates at five to ten kilobytes each is a great deal of markdown to carry for skills that mostly get rejected.
+
+**Four is a cap, not a starting point.** Never one agent per candidate. That scales with whatever the search happens to turn up and spawns thirty agents on somebody who asked a simple question.
+
+If the `Agent` tool is unavailable, work the four sources one after another in this context and say that is what you are doing.
+
+### 4. Score
+
+Against `references/rubric.md`. Five rows, 1 to 5 each, out of 25. **Auto-reject if row 1, 2 or 3 scores under 3**, whatever the total says.
+
+**The default answer is "do not install".** Context is a real cost and most skills are not worth it.
+
+### 5. Report
+
+One block per recommendation, in the shape below. No cap on how many, because the default-REJECT stance and the three auto-reject rows keep the list short without an arbitrary limit.
+
+### 6. Offer to go deeper
+
+At the very end, not before: offer to read a notes folder if they point at one.
+
+## Output
+
+Open with the files read and the profile in three or four lines, so a wrong read is visible immediately.
+
+Then one block each:
+
+```
+### owner/repo - skill-name - 21/25
+What it does.  One line.
+Why you.       Tied to something specific found in their files. Quote it.
+Trust.         Author, last commit, licence, official or marketplace listed.
+Watch out.     Drawbacks, scripts it runs, keys it needs.
+Verdict.       INSTALL, TRIAL or REJECT, then the clone URL.
+```
+
+"Why you" is the row that justifies this skill existing. If it could be written about anyone, the recommendation is not personalised and the score on row 3 is wrong.
+
+Every REJECT that got far enough to be read gets one line saying why. A rejection with a reason teaches the person something about their own setup. A silent rejection teaches them nothing.
+
+## What this will not do
+
+**It does not install anything.** It hands over a clone URL and a verdict, and stops. Installing on someone's behalf, from a list generated by reading their private files, without asking, is too much for one command.
+
+**It does not vet connectors.** A connector, also called an MCP server, is an external service Claude talks to. It holds credentials and moves data through a third party. Vetting one means reading a privacy policy and an OAuth scope list, not a markdown file. A score out of 25 that treats "this text file is safe" and "this company can read your Gmail" as the same measurement is a bad score.
+
+One unscored mention at the end, clearly labelled as not vetted, is allowed. Nothing more.
+
+**It does not rate from a name.** Every candidate's actual `SKILL.md` is opened and read. Blog posts, videos and X threads are leads to a repo, never sources in themselves.
+
+## Limits, stated honestly
+
+A profile built from four files is a thin read of a person. It will miss anything they have not written down.
+
+The search only sees public GitHub and the marketplaces. Anything private, internal, or newly published is invisible to it.
+
+Row 3, fit, is the most subjective row in the rubric and the one most likely to be generous. Treat a high total that rests on row 3 with suspicion.
