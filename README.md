@@ -5,7 +5,6 @@ Reads your own Claude setup, works out what you actually do, then finds skills t
 ![version](https://img.shields.io/badge/version-0.1.0-blueviolet)
 ![licence](https://img.shields.io/badge/licence-MIT-blue)
 ![agents](https://img.shields.io/badge/agents-4%20per%20run-orange)
-![runs](https://img.shields.io/badge/documented%20runs-1-green)
 ![status](https://img.shields.io/badge/status-experimental-yellow)
 
 ## What it reads
@@ -106,12 +105,6 @@ Four agents cost real tokens. A run is not free, and the skill announces the fan
 It has been run against one profile. The fit scoring is the part most likely to disappoint on a profile unlike that one.
 
 GitHub rate-limits unauthenticated API access at sixty requests an hour, and a full run exhausts it. Install and authenticate `gh` before running, or expect roughly half the candidate pool. The run does not currently tell you how much it missed.
-
-## Runs
-
-Published in full, failures included.
-
-[**Run 1, 19 August 2026**](runs/2026-08-19-first-run.md). Five agents against the author's own profile, run to break the skill rather than to find skills. Eleven defects found and fixed, all listed. Also the run that turned up `prism-scanner`: a skill advertising itself as a scanner that checks other skills for malicious behaviour, which grants itself shell access, installs a package whose metadata points at a different account, and deletes persistence mechanisms. Published under a randomly generated username.
 
 ## Licence
 
