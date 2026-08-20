@@ -1,9 +1,8 @@
 ---
 name: assay
-description: Reads your own Claude configuration and notes, works out what you actually do, then searches GitHub and the plugin marketplaces for skills and plugins that fit you and vets each one before recommending it. Nothing is scored without its file being opened and read, and each survivor is scored out of 25 and given a verdict of INSTALL, TRIAL or REJECT with its drawbacks named. Use when asked what skills are worth having, which skills would suit me, what should I install, or to find skills for what I do. Reads local files without asking first, and names them at the top of every run.
+description: Reads your own Claude configuration and notes, works out what you actually do, then searches GitHub and the plugin marketplaces for skills and plugins that fit you and vets each one before recommending it. Nothing is scored without its file being opened and read, and each survivor is scored out of 25 and given a verdict of INSTALL, TRIAL or REJECT with its drawbacks named. Use when asked what skills are worth having, which skills would suit me, what should I install, or to find skills for what I do. Reads local files without asking first, names them before it starts, and passes the profile it builds to four subagents.
 argument-hint: "[a domain to narrow to, optional]"
 allowed-tools: Agent, Read, Glob, Grep, WebSearch, WebFetch, AskUserQuestion
-version: 0.1.0
 ---
 
 # Assay
@@ -14,16 +13,22 @@ This reads your own setup first, then goes looking. The search terms come from y
 
 ## What this reads, before anything else
 
-Four locations, and no others:
+**Say this before the first read, not after it.** This skill fires on phrases like "what should I install", so most people meet it without having chosen it, and a disclosure printed after the reads have happened is a receipt rather than a warning. Open with one line naming the four profile locations and saying they are about to be read, then read them. It costs a sentence.
+
+Four locations build the profile:
 
 1. `~/.claude/CLAUDE.md`
 2. `CLAUDE.md` in the working directory and every parent directory
 3. `~/.claude/projects/*/memory/*.md`
 4. `README.md` in the working directory
 
-These are the paths Claude Code already treats as user context. Nothing is uploaded. Web searches carry topic keywords only, never a phrase lifted from a private note.
+Step 2 below reads three more things, and one of them is a file rather than a folder listing. All seven are disclosed in `SECURITY.md`, and "four locations, and no others" was wrong until 20 August 2026.
 
-**Name every file you read at the top of the output.** The person did not get asked first, so they get told immediately after. This is not optional and it is not a footnote.
+These are paths Claude Code already treats as user context. **The profile goes to the model API**, because step 3 passes it to four subagents verbatim, so treat everything read here as leaving the machine. Web searches carry topic keywords only, never a phrase lifted from a private note.
+
+**Name every file you read at the top of the output.** The person did not get asked first, so they get told immediately after as well as before. This is not optional and it is not a footnote.
+
+**A run costs real tokens.** The one measured run, on 19 August 2026, came to roughly 678,000 subagent tokens across five agents and 182 tool calls, with about sixteen minutes for the slowest agent. That was five agents, before the cap came down to four. One run, one profile, on one machine. It is a measurement, not a price.
 
 ## How a run goes
 
@@ -33,7 +38,7 @@ These are the paths Claude Code already treats as user context. Nothing is uploa
 
 So do not glob blindly:
 
-- Derive the expected folder from the current working directory using the hyphen rule, and prefer it.
+- Derive the expected folder from the **git repository root** if the working directory is inside one, and from the working directory itself if it is not. This was wrong until 20 August 2026: the instruction said working directory alone, which silently picks the wrong folder, or none, for anyone working in a subdirectory of a repository. A Windows drive letter survives the hyphen rule intact, so `G:\My Drive\ClaudeHub` becomes `G--My-Drive-ClaudeHub`.
 - If that folder does not exist, use the memory folder with the most recently modified file.
 - Skip empty folders entirely.
 - **Say which folder you used and how old its newest file is.** A profile built from stale notes is worse than no profile, because it looks right.
@@ -52,6 +57,10 @@ That last one is the easiest to skip and the most valuable. On 19 August 2026 an
 
 **If none of the four exist**, say so plainly and ask them to describe what they do in one sentence, then carry on from that. Do not guess from an empty profile. Do not fall back to recommending popular skills. A popularity list is not what this is for, and anyone can find one.
 
+**If only some exist, check whose they are before using them.** The dangerous case is partial, not empty, and it was unhandled until 20 August 2026. Run this in a work repository with no personal `CLAUDE.md` on the machine and locations 2 and 4 still hit: a project `CLAUDE.md` and a project `README.md`, both describing an employer's codebase and neither describing the person. The profile then reads as somebody who does whatever that repository does, the run is confidently wrong, and it has quietly profiled a third party's project rather than the user.
+
+So before scoring anything, check that at least one of locations 1 and 3, the two that are actually about the person, produced something. If neither did, say exactly that: the only files found describe the project, not you. Then ask for the one-sentence description and treat the repository files as context about the work, never as evidence for row 3.
+
 If the user passed an argument, narrow to that domain and say you have.
 
 ### 2. List what is already installed
@@ -66,7 +75,7 @@ That third category is a trap, found on 19 August 2026 when an agent nearly reco
 
 **Include plugin-namespaced skills.** A plugin's skills appear as `plugin-name:skill-name`. On the same day, two agents independently wasted most of a run on candidates the person already had, because the list they were handed contained standalone skills only and omitted every plugin-supplied one. An entire category of framework skills was already installed and neither agent could see it.
 
-**Pass the complete list to all four agents, verbatim.** Do not summarise it and do not trim it. An agent cannot check against what it was not given.
+**Pass the complete list to all four agents, verbatim, in the `<INSTALLED>` slot in each brief.** Do not summarise it and do not trim it. An agent cannot check against what it was not given, and until 20 August 2026 the briefs had no such slot, so this instruction had nowhere to land and the dedupe rule was dead in every run.
 
 ### 3. Search, four agents, one per source
 
@@ -89,7 +98,11 @@ If the `Agent` tool is unavailable, work the four sources one after another in t
 
 ### 4. Score
 
-Against `references/rubric.md`. Five rows, 1 to 5 each, out of 25. **Auto-reject if row 1, 2 or 3 scores under 3**, whatever the total says.
+Against `references/rubric.md`. Five rows, 1 to 5 each, out of 25. **Auto-reject if row 1, 2 or 3 scores under 3, or if row 5 scores 1**, whatever the total says. Row 5 was added to that list on 20 August 2026, because before then the safety row could not reject anything.
+
+Then read the verdict off the total, per the bands in the rubric: INSTALL at 20 or above, TRIAL from 16 to 19, REJECT at 15 or below or on any auto-reject. A total of 20 or more that falls under 20 once row 3 is discounted to 3 is capped at TRIAL.
+
+**Every TRIAL carries an exit line.** What would settle it, and when to check. Without one it is an INSTALL with a hedge in front of it.
 
 **The default answer is "do not install".** Context is a real cost and most skills are not worth it.
 
@@ -119,6 +132,8 @@ Trust.         Author, last commit, licence, official or marketplace listed.
                "No provenance available" is a valid answer, and a damning one.
 Watch out.     Drawbacks, scripts it runs, keys it needs.
 Verdict.       INSTALL, TRIAL or REJECT, then the clone URL.
+Trial exit.    On a TRIAL only. "Use it on the next three CV rewrites. Keep it if the
+               output needed no restructuring, drop it if it never fired."
 ```
 
 "Why you" is the line that justifies this skill existing. If it could be written about anyone, the recommendation is not personalised and the score on row 3 is wrong.

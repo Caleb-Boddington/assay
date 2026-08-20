@@ -2,7 +2,7 @@
 
 Reads your own Claude setup, works out what you actually do, then finds skills that fit you and vets each one before recommending it.
 
-![version](https://img.shields.io/badge/version-0.1.0-blueviolet)
+![version](https://img.shields.io/badge/version-0.1.1-blueviolet)
 ![licence](https://img.shields.io/badge/licence-MIT-blue)
 ![agents](https://img.shields.io/badge/agents-4_per_run-orange)
 ![status](https://img.shields.io/badge/status-experimental-yellow)
@@ -11,16 +11,28 @@ Reads your own Claude setup, works out what you actually do, then finds skills t
 
 This is first because the skill reads local files **without asking you first**. You should know that before you install it, not after.
 
-Four locations, and no others:
+Four locations build the profile:
 
 1. `~/.claude/CLAUDE.md`
 2. `CLAUDE.md` in the working directory and every parent directory
 3. `~/.claude/projects/*/memory/*.md`
 4. `README.md` in the working directory
 
-These are the paths Claude Code already treats as user context. Nothing is uploaded anywhere. Web searches carry topic keywords only, never a phrase lifted from a private note. Every run names the files it read at the top of its output, so you can see what it based its guesses on.
+Then, to avoid recommending you something you already run, it reads three more: the folder names in `~/.claude/skills/`, the folder names **and the contents of `installed_plugins.json`** in `~/.claude/plugins/`, and the list of skills the current session already provides. That is seven things, not four. This README said "four locations, and no others" until 20 August 2026, and it was wrong.
 
-If none of those files exist, it says so and asks you to describe what you do in one sentence.
+These are paths Claude Code already treats as user context.
+
+**Your profile text goes to the model API.** It is passed to four subagents verbatim, quotes included, because the fit score cannot be checked without the evidence behind it. So this sends your notes to the same provider you are already talking to, and to nowhere else: no telemetry, no analytics, and no server behind this skill. Until 20 August 2026 this file said "Nothing is uploaded anywhere", which was false. If a line in your `CLAUDE.md` should not leave your machine, check it before you run this. Full detail in [SECURITY.md](SECURITY.md).
+
+Web searches carry topic keywords only, never a phrase lifted from a private note. Every run names the files it read at the top of its output, so you can see what it based its guesses on.
+
+If none of those files exist, it says so and asks you to describe what you do in one sentence. If only the working-directory ones exist, which happens when you run it inside somebody else's repository, it says that too rather than profiling the repository and calling it you.
+
+## What a run costs
+
+Roughly 678,000 subagent tokens, 182 tool calls, and about sixteen minutes for the slowest agent. Measured once, on 19 August 2026, on one profile, on one machine, and across five agents rather than the four the skill now caps at.
+
+That is a measurement, not a price. Your run will differ. It is here because a fan-out of four agents is not free and you should see the order of magnitude before you start, not after.
 
 ## The problem
 
@@ -78,7 +90,13 @@ Five rows, 1 to 5 each, out of 25. Full detail in `references/rubric.md`.
 | 4 | Context cost against payoff |
 | 5 | Safety and dependencies |
 
-**Auto-reject if row 1, 2 or 3 scores under 3**, whatever the total. The default answer is "do not install".
+**Auto-reject if row 1, 2, 3 scores under 3, or if row 5 scores 1**, whatever the total. The default answer is "do not install".
+
+Row 5 could not reject anything until 20 August 2026. Only the first three rows gated, so a candidate scoring 5,5,5,5,1 totalled 21 and survived: the rubric could spot a skill trying to steer the agent reading it, score it 1 as instructed, and recommend it anyway.
+
+**The verdict comes off the total.** INSTALL at 20 or above, TRIAL from 16 to 19, REJECT at 15 or below or on any auto-reject. Anything at 20 or above that falls under 20 once row 3 is discounted to 3 is capped at TRIAL, because fit is the row most likely to be scored generously. Every TRIAL states what would settle it and when to check.
+
+These bands are also new on 20 August 2026. Before them TRIAL appeared in the output and nowhere in the rubric, and the first published run was non-monotonic because of it: a 22/25 got TRIAL while three separate 21/25 entries got INSTALL.
 
 **Auto-reject if it will not run on your operating system**, whatever it scores. This sits outside the five rows, because a great skill you cannot run is worth nothing. A lot of published skills quietly assume macOS or Linux.
 
@@ -104,7 +122,13 @@ Four agents cost real tokens. A run is not free, and the skill announces the fan
 
 It has been run against one profile. The fit scoring is the part most likely to disappoint on a profile unlike that one.
 
-GitHub rate-limits unauthenticated API access at sixty requests an hour, and a full run exhausts it. Install and authenticate `gh` before running, or expect roughly half the candidate pool. The run does not currently tell you how much it missed.
+GitHub rate-limits unauthenticated API access at sixty requests an hour. That budget is per IP address, not per agent, so four agents running at once share it and get roughly fifteen requests each. A full run exhausts it. Install and authenticate `gh` before running, or expect roughly half the candidate pool. The run does not currently tell you how much it missed.
+
+## The name
+
+There is a collision, and it is better heard here than found later. [assay.tools](https://assay.tools) is an existing product describing itself as the quality layer for agentic software, and it scores packages on agent-friendliness and security. Same verb, same object, adjacent market. This project is unaffiliated with it, is not a competitor to it, and is a personal skill of a few hundred lines rather than a platform.
+
+The name stayed because the word is the right one: an assay is a test of what something actually contains, as opposed to what its label claims. If the overlap ever causes real confusion, this one is the one that should move.
 
 ## Licence
 
