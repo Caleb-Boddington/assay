@@ -2,7 +2,7 @@
 
 Reads your own Claude setup, works out what you actually do, then finds skills that fit you and vets each one before recommending it.
 
-![version](https://img.shields.io/badge/version-0.1.1-blueviolet)
+![version](https://img.shields.io/badge/version-0.2.0-blueviolet)
 ![licence](https://img.shields.io/badge/licence-MIT-blue)
 ![agents](https://img.shields.io/badge/agents-4_per_run-orange)
 ![status](https://img.shields.io/badge/status-experimental-yellow)
@@ -15,18 +15,38 @@ Four locations build the profile:
 
 1. `~/.claude/CLAUDE.md`
 2. `CLAUDE.md` in the working directory and every parent directory
-3. `~/.claude/projects/*/memory/*.md`
+3. Your Claude Code memory folder, **every `.md` in it at any depth**
 4. `README.md` in the working directory
 
-Then, to avoid recommending you something you already run, it reads three more: the folder names in `~/.claude/skills/`, the folder names **and the contents of `installed_plugins.json`** in `~/.claude/plugins/`, and the list of skills the current session already provides. That is seven things, not four. This README said "four locations, and no others" until 20 August 2026, and it was wrong.
+Then, to avoid recommending you something you already run, it reads three more: the folder names in `~/.claude/skills/`, the folder names **and the contents of `installed_plugins.json`** in `~/.claude/plugins/`, and the list of skills the current session already provides. That is seven things, not four. That distinction matters: three of the seven are an inventory of what you run, not a profile of you.
 
 These are paths Claude Code already treats as user context.
 
-**Your profile text goes to the model API.** It is passed to four subagents verbatim, quotes included, because the fit score cannot be checked without the evidence behind it. So this sends your notes to the same provider you are already talking to, and to nowhere else: no telemetry, no analytics, and no server behind this skill. Until 20 August 2026 this file said "Nothing is uploaded anywhere", which was false. If a line in your `CLAUDE.md` should not leave your machine, check it before you run this. Full detail in [SECURITY.md](SECURITY.md).
+**Your profile text goes to the model API.** It is passed to four subagents verbatim, quotes included, because the fit score cannot be checked without the evidence behind it. So this sends your notes to the same provider you are already talking to, and to nowhere else: no telemetry, no analytics, and no server behind this skill.  If a line in your `CLAUDE.md` should not leave your machine, check it before you run this. Full detail in [SECURITY.md](SECURITY.md).
 
 Web searches carry topic keywords only, never a phrase lifted from a private note. Every run names the files it read at the top of its output, so you can see what it based its guesses on.
 
 If none of those files exist, it says so and asks you to describe what you do in one sentence. If only the working-directory ones exist, which happens when you run it inside somebody else's repository, it says that too rather than profiling the repository and calling it you.
+
+## What it exposes you to
+
+A reader deciding whether to install should not have to open `SECURITY.md` to learn any of the following, and most people never do.
+
+**Four agents read text written by strangers, while holding quotes from your notes.** That is the job: they fetch `SKILL.md` files from public repositories and score them. A `SKILL.md` is a prompt, so a hostile one can contain instructions addressed to the agent reading it. The four briefs tell each agent to treat retrieved text as data and to reject anything carrying an embedded instruction. That defence has been tested against exactly one hostile fixture, written by the author, refused once. It is a smoke test. It licenses nothing.
+
+**Those agents are general-purpose.** They inherit every tool available to subagents, which means Bash, Write and Edit alongside WebFetch, plus any MCP server you have connected. Nothing constrains where a fetch goes. Retrieved text and your profile text share a context, so a fetch could in principle be steered somewhere of an attacker's choosing carrying profile text with it. No exploit has been run and none is offered.
+
+**Your session transcript keeps all of it**, in plain text, under `~/.claude/projects/`, which is the same tree the skill read your memory notes from.
+
+**The safety score is a reading, not an analysis.** A candidate scoring well on safety means nothing alarming appeared in the one markdown file that was opened. It does not mean the repository is safe, and a clone brings the whole repository. Read anything you install yourself.
+
+## What it will not pass on
+
+Item 3 above reads your whole memory tree, which on a real vault is most of what you have written down. So the skill classifies what it reads and withholds the categories a recommendation cannot use: credentials, account and reference numbers, government identifiers, other people's names and anything said about them, health and legal and financial matters, and addresses and phone numbers. Files whose name indicates a secret are never opened at all, matched as whole words and each skip named in the output so you can catch a false positive.
+
+It can afford to withhold all of that because none of it scores. The fit row asks what you do repeatedly, and a policy number is not a recurring task.
+
+**Nothing enforces this.** It is an instruction to a model and it can fail in either direction. Keep secrets out of files you let an agent read, which is worth doing whether or not you run this.
 
 ## What a run costs
 
@@ -92,11 +112,11 @@ Five rows, 1 to 5 each, out of 25. Full detail in `references/rubric.md`.
 
 **Auto-reject if row 1, 2, 3 scores under 3, or if row 5 scores 1**, whatever the total. The default answer is "do not install".
 
-Row 5 could not reject anything until 20 August 2026. Only the first three rows gated, so a candidate scoring 5,5,5,5,1 totalled 21 and survived: the rubric could spot a skill trying to steer the agent reading it, score it 1 as instructed, and recommend it anyway.
+Row 5 gates for a reason. Without it only the first three rows reject, so a candidate scoring 5,5,5,5,1 totals 21 and survives: the rubric can spot a skill trying to steer the agent reading it, score it 1 as instructed, and recommend it anyway.
 
 **The verdict comes off the total.** INSTALL at 20 or above, TRIAL from 16 to 19, REJECT at 15 or below or on any auto-reject. Anything at 20 or above that falls under 20 once row 3 is discounted to 3 is capped at TRIAL, because fit is the row most likely to be scored generously. Every TRIAL states what would settle it and when to check.
 
-These bands are also new on 20 August 2026. Before them TRIAL appeared in the output and nowhere in the rubric, and the first published run was non-monotonic because of it: a 22/25 got TRIAL while three separate 21/25 entries got INSTALL.
+The bands matter more than they look. Without them TRIAL is a word in the output with no definition behind it, and scoring goes non-monotonic: a 22/25 lands on TRIAL while three separate 21/25 entries land on INSTALL.
 
 **Auto-reject if it will not run on your operating system**, whatever it scores. This sits outside the five rows, because a great skill you cannot run is worth nothing. A lot of published skills quietly assume macOS or Linux.
 
@@ -122,7 +142,9 @@ Four agents cost real tokens. A run is not free, and the skill announces the fan
 
 It has been run against one profile. The fit scoring is the part most likely to disappoint on a profile unlike that one.
 
-GitHub rate-limits unauthenticated API access at sixty requests an hour. That budget is per IP address, not per agent, so four agents running at once share it and get roughly fifteen requests each. A full run exhausts it. Install and authenticate `gh` before running, or expect roughly half the candidate pool. The run does not currently tell you how much it missed.
+GitHub rate-limits unauthenticated API access at sixty requests an hour. That budget is per IP address, not per agent, so four agents running at once share it and get roughly fifteen requests each, against 5,000 when authenticated. It binds the searching, not the reading: fetching a shortlisted file is a CDN request and does not draw on it. Install and authenticate `gh` before running, or expect a smaller pool. It is tempting to claim this limit makes reading every candidate impossible. That is wrong twice over, and the reasoning is in [references/rubric.md](references/rubric.md).
+
+**The run does not tell you what fraction of the pool it reached.** The instruction to report screened-against-opened exists in the prose and has no line in the output template to land in, so it has never appeared in a run.
 
 ## The name
 
