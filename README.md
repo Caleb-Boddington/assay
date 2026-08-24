@@ -4,8 +4,14 @@ Reads your own Claude setup, works out what you actually do, then finds skills t
 
 ![version](https://img.shields.io/badge/version-0.2.0-blueviolet)
 ![licence](https://img.shields.io/badge/licence-MIT-blue)
-![agents](https://img.shields.io/badge/agents-4_per_run-orange)
+![agents](https://img.shields.io/badge/agents-4%20per%20run-orange)
 ![status](https://img.shields.io/badge/status-experimental-yellow)
+
+Skill directories let you search by task. You already know your task. What you do not know is which of several hundred published skills is worth the context it costs, which one runs a script you never read, and which one solves a problem you do not have. Searching by task also means you only ever find what you already thought to look for, so nobody finds the skill that would have saved them four hours a week.
+
+Assay searches by *you* instead, and opens every candidate it scores. The default answer is "do not install".
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed in each version and why.
 
 ## What it reads
 
@@ -48,20 +54,6 @@ It can afford to withhold all of that because none of it scores. The fit row ask
 
 **Nothing enforces this.** It is an instruction to a model and it can fail in either direction. Keep secrets out of files you let an agent read, which is worth doing whether or not you run this.
 
-## What a run costs
-
-Roughly 678,000 subagent tokens, 182 tool calls, and about sixteen minutes for the slowest agent. Measured once, on 19 August 2026, on one profile, on one machine, and across five agents rather than the four the skill now caps at.
-
-That is a measurement, not a price. Your run will differ. It is here because a fan-out of four agents is not free and you should see the order of magnitude before you start, not after.
-
-## The problem
-
-Skill directories let you search by task. You already know your task. What you do not know is which of several hundred published skills is worth the context it costs, which one runs a script you never read, and which one solves a problem you do not have.
-
-Searching by task also means you only ever find what you already thought to look for. Nobody searches for the skill that would have saved them four hours a week, because they do not know it exists.
-
-So this searches by *you* instead.
-
 ## Install
 
 ```bash
@@ -87,6 +79,12 @@ Or narrow it:
 ```
 /assay security
 ```
+
+## What a run costs
+
+Roughly 678,000 subagent tokens, 182 tool calls, and about sixteen minutes for the slowest agent. Measured once, on 19 August 2026, on one profile, on one machine, and across five agents rather than the four the skill now caps at.
+
+That is a measurement, not a price. Your run will differ. It is here because a fan-out of four agents is not free and you should see the order of magnitude before you start, not after.
 
 ## How it works
 
